@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Reddit Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+</head>
+<body>
+    <div class="card">
+        {% if not results_json %}
+        <h1>Reddit Analyzer</h1>
+        <p>Настройте параметры поиска:</p>
+
+        <form id="mainForm" method="post">
+            <div id="fields">
+                <div class="item-row">
+                    <input type="text" name="subs[]" placeholder="Subreddit (r/nature)" required>
+                    <input type="text" name="kws[]" placeholder="Ключевые слова" required>
+                    <button type="button" class="btn-add" onclick="addRow()">+</button>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <label>Лимит постов (N):</label>
+                <input type="number" name="limit" value="25" style="width: 80px; margin-left: 10px;">
+            </div>
+            <input type="hidden" name="json_data" id="hidden_json">
+            <button type="submit" class="btn-submit">ЗАПУСТИТИ АНАЛІЗ</button>
+        </form>
+
+        {% else %}
+        <a href="/" class="back-link">← Новый поиск</a>
+        <h1>Результаты анализа</h1>
+        <h3>JSON Ответ:</h3>
+        <div class="json-box"><pre>{{ results_json }}</pre></div>
+
+        <h3>Детальный просмотр:</h3>
+        {% for sub, posts in results_dict.items() %}
+            <div class="sub-res">
+                <strong>{{ sub }}</strong>
+                {% if posts %}
+                    <ul>{% for p in posts %}<li>{{ p }}</li>{% endfor %}</ul>
+                {% else %}<p>Совпадений не найдено</p>{% endif %}
+            </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Подключаем JS -->
+    <script src="{{ url_for('static', path='/js/script.js') }}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
